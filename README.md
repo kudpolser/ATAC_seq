@@ -44,4 +44,10 @@ $ nextflow run nf-core/atacseq -profile test -resume sleepy_descartes --narrow_p
 
 #### Задание 9 (1 балла): Какие нашлись мотивы? Приложите лого лучшего из них. Является ли эта находка статистически значимой?
 
+```
+less results/bwa/mergedReplicate/macs/narrowPeak/OSMOTIC_STRESS_T15.mRp.clN_peaks.narrowPeak
+cut -f 1-6 results/bwa/mergedReplicate/macs/narrowPeak/OSMOTIC_STRESS_T15.mRp.clN_peaks.narrowPeak > output.bed
+bedtools getfasta -fi results/genome/genome.fa -bed output.bed
+```
+
 #### Задание 10 (1 балла): Запустите поиск похожих мотивов с помощью Tomtom. Приложите лого наиболее похожего. Является ли эта находка статистически значимой? Опишите функцию данного транскрипционного фактора
