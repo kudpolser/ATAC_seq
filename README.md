@@ -1,5 +1,7 @@
 # ATAC_seq
 
+Данные: OSMOTIC_STRESS_T15_R2_T1_2
+
 #### Задание 0 (0,5 балла). Кратко опишите суть эксперимента
 
 #### Задание 1 (1 балл): какая команда используется для запуска анализа?
@@ -44,10 +46,30 @@ $ nextflow run nf-core/atacseq -profile test -resume sleepy_descartes --narrow_p
 
 #### Задание 9 (1 балла): Какие нашлись мотивы? Приложите лого лучшего из них. Является ли эта находка статистически значимой?
 
+Создадим fasta файл из narrowPeak файла и geneome.fa
 ```
 less results/bwa/mergedReplicate/macs/narrowPeak/OSMOTIC_STRESS_T15.mRp.clN_peaks.narrowPeak
 cut -f 1-6 results/bwa/mergedReplicate/macs/narrowPeak/OSMOTIC_STRESS_T15.mRp.clN_peaks.narrowPeak > output.bed
-bedtools getfasta -fi results/genome/genome.fa -bed output.bed
+cp results/genome/genome.fa .
+bedtools getfasta -fi genome.fa -bed output.bed > output.fa
+```
+Запустим MEME со следующими параметрами:
+```
+meme output.fa -dna -oc . -nostatus -time 18000 -mod zoops -nmotifs 5 -minw 6 -maxw 20 -objfun classic -revcomp -markov_order 2
 ```
 
+Нашелся один значимый мотив:
+![GitHub Logo](meme.png)
+
+
 #### Задание 10 (1 балла): Запустите поиск похожих мотивов с помощью Tomtom. Приложите лого наиболее похожего. Является ли эта находка статистически значимой? Опишите функцию данного транскрипционного фактора
+
+С помощью TOMTOM нашлись следующие похожие мотивы:
+UP00097_2 (Mtf1_secondary),  MA1125.1 (ZNF384),  MA0050.2 (IRF1),  MA0442.2 (SOX10),  UP00037_1 (Zfp105_primary),  CPEB1_full
+
+Результат можно найти по ссылке: http://meme-suite.org/opal-jobs/appTOMTOM_5.3.0_16071195451201823031279/tomtom.html#match_0_5
+
+Однако все совпадения имеют не очень надежный уровень значимости. Минимльное занчение е-value 5.45e-01 для металл-регуляторного фактора транскрипции.
+Его лого:
+![GitHub Logo](tomtom.png)
+
